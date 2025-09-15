@@ -26,11 +26,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle
+    - name: Build with Gradle (Optimized)
       run: |
-        export GRADLE_OPTS="-Xmx6g -Xms2g -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
-        ./gradlew clean --no-daemon --no-build-cache
-        ./gradlew assembleDebug --no-daemon --no-build-cache --max-workers=1
+        export GRADLE_OPTS="-Xmx8g -Xms3g -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.caching=false"
+        ./gradlew clean --no-daemon --no-build-cache --offline
+        ./gradlew :app:assembleDebug --no-daemon --no-build-cache --offline --max-workers=1 --console=plain
 
     - name: Upload build artifacts
       if: success()
