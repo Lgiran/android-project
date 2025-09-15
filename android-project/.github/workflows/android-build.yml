@@ -24,9 +24,13 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build --no-daemon
+      run: |
+        export GRADLE_OPTS="-Xmx4g -Xms1g"
+        ./gradlew clean --no-daemon
+        ./gradlew build --no-daemon --max-workers=2 --no-build-cache
 
     - name: Upload build artifacts
+      if: success()
       uses: actions/upload-artifact@v3
       with:
         name: android-build-output
