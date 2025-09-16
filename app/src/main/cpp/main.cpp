@@ -1,7 +1,7 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_mixer.h"
+#include "SDL2/SDL_ttf.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -18,6 +18,7 @@ struct Vector2 {
     Vector2(float x = 0, float y = 0) : x(x), y(y) {}
 };
 
+// بقیه کدهای شما...
 struct Rocket {
     Vector2 position;
     Vector2 velocity;
