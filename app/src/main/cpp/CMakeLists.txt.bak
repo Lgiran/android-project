@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.10.2)
+project(SDLApp)
+
+# اضافه کردن هدرهای SDL
+include_directories(SDL2)
+
+# جمع کردن همه فایل‌های SDL
+file(GLOB SDL_SOURCES SDL2_src/*.c)
+
+# جمع کردن سورس اصلی بازی/برنامه
+file(GLOB APP_SOURCES *.cpp)
+
+# ساختن کتابخانه مشترک
+add_library(main SHARED ${APP_SOURCES} ${SDL_SOURCES})
+
+# لینک کردن کتابخانه‌های اندروید
+find_library(log-lib log)
+find_library(android-lib android)
+find_library(GLESv2-lib GLESv2)
+
+target_link_libraries(main ${log-lib} ${android-lib} ${GLESv2-lib})

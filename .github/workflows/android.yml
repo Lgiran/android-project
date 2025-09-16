@@ -21,6 +21,13 @@ jobs:
         distribution: temurin
         java-version: 17
 
+    - name: Set up Android SDK (with ndk & cmake)
+      uses: android-actions/setup-android@v3
+      with:
+        ndk: '27.0.12077973'
+        cmake: '3.22.1'
+        api-level: 34
+
     - name: Gradle build
       run: ./gradlew assembleDebug --stacktrace
 
