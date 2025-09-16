@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.10)
 project(rocket_game)
 
 # فایل‌های سورس
@@ -8,7 +8,18 @@ set(SRC_FILES main.cpp)
 if(EXISTS "${CMAKE_SOURCE_DIR}/SDL2_src/CMakeLists.txt")
     message(STATUS "Compiling SDL2 from source")
     add_subdirectory(SDL2_src)
-    set(SDL2_LIBS SDL2)
+
+    # بررسی اینکه SDL2 چه هدف‌هایی ساخته
+    if(TARGET SDL2)
+        set(SDL2_LIBS SDL2)
+    elseif(TARGET SDL2-static)
+        set(SDL2_LIBS SDL2-static)
+        if(TARGET SDL2main)
+            list(APPEND SDL2_LIBS SDL2main)
+        endif()
+    else()
+        message(FATAL_ERROR "SDL2 target not found after add_subdirectory(SDL2_src)")
+    endif()
 else()
     message(FATAL_ERROR "SDL2_src directory not found - please make sure SDL2 source code is available")
 endif()
@@ -24,7 +35,7 @@ find_library(egl-lib EGL)
 find_library(m-lib m)
 
 # مسیر include برای هدرهای SDL2
-target_include_directories(rocket_game PRIVATE 
+target_include_directories(rocket_game PRIVATE
     ${CMAKE_SOURCE_DIR}/SDL2
     ${CMAKE_SOURCE_DIR}/SDL2_src/include
 )
