@@ -1,27 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
 project(rocket_game)
 
-# فایل‌های سورس
+# فایل‌های سورس اپلیکیشن
 set(SRC_FILES main.cpp)
 
-# کامپایل SDL2 از سورس
-if(EXISTS "${CMAKE_SOURCE_DIR}/SDL2_src/CMakeLists.txt")
+# مسیرهای include برای هدرهای SDL2
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/SDL2
+    ${CMAKE_CURRENT_SOURCE_DIR}/SDL2_src/include
+)
+
+# اگر سورس SDL2 وجود داشت، اضافه کن
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/SDL2_src/CMakeLists.txt")
     message(STATUS "Compiling SDL2 from source")
     add_subdirectory(SDL2_src)
-
-    # بررسی اینکه SDL2 چه هدف‌هایی ساخته
-    if(TARGET SDL2)
-        set(SDL2_LIBS SDL2)
-    elseif(TARGET SDL2-static)
-        set(SDL2_LIBS SDL2-static)
-        if(TARGET SDL2main)
-            list(APPEND SDL2_LIBS SDL2main)
-        endif()
-    else()
-        message(FATAL_ERROR "SDL2 target not found after add_subdirectory(SDL2_src)")
-    endif()
-else()
-    message(FATAL_ERROR "SDL2_src directory not found - please make sure SDL2 source code is available")
 endif()
 
 # ساخت کتابخانه native اپ
@@ -34,18 +26,11 @@ find_library(glesv2-lib GLESv2)
 find_library(egl-lib EGL)
 find_library(m-lib m)
 
-# مسیر include برای هدرهای SDL2
-target_include_directories(rocket_game PRIVATE
-    ${CMAKE_SOURCE_DIR}/SDL2
-    ${CMAKE_SOURCE_DIR}/SDL2_src/include
-)
-
-# لینک کردن
+# لینک کردن کتابخانه‌ها
 target_link_libraries(rocket_game
     ${log-lib}
     ${android-lib}
     ${glesv2-lib}
     ${egl-lib}
     ${m-lib}
-    ${SDL2_LIBS}
 )
